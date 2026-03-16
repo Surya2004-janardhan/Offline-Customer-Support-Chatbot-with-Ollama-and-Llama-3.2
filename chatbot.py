@@ -11,5 +11,13 @@ QUERIES = [
     "My credit card was charged twice for the same order.",
     "When will my backordered item finally ship?",
     "I need to change the shipping address on an order I just placed.",
-    "Do you offer price matching if an item goes on sale after I buy it?"
+    "Do you offer price matching if an item goes on sale after I buy it?",
+    "Can you explain how your reward points system works?",
+    "Why was my order canceled without any notification?",
+    "How can I delete my account and remove my personal data?",
+    "I received a defective product, how can I get a replacement?",
+    "Is it possible to track the exact location of the delivery truck?",
+    "Can I use two different promo codes on the same checkout?",
+    "Which payment methods do you accept for international shipping?",
+    "How long does it typically take for a refund to process to my bank?"
 ]
