@@ -1,7 +1,8 @@
 # chatbot.py
 
-# First 10 adapted e-commerce customer queries
-QUERIES = [
+def get_ecommerce_queries():
+    """Returns the 20 adapted e-commerce customer queries."""
+    return [
     "How do I track the shipping status of my recent order?",
     "My discount code is not working at checkout. Can you help?",
     "What is your return policy for international orders?",
@@ -21,3 +22,7 @@ QUERIES = [
     "Which payment methods do you accept for international shipping?",
     "How long does it typically take for a refund to process to my bank?"
 ]
+
+if __name__ == "__main__":
+    queries = get_ecommerce_queries()
+    print(f"Loaded {len(queries)} e-commerce queries for evaluation.")
