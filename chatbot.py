@@ -60,10 +60,19 @@ if __name__ == "__main__":
     zero_shot_template = read_template("prompts/zero_shot_template.txt")
     one_shot_template = read_template("prompts/one_shot_template.txt")
 
-    if not zero_shot_template or not one_shot_template:
-        print("Error: Prompt templates not found. Please ensure they exist in the 'prompts/' directory.")
-    else:
+    # Ensure eval directory exists
+    os.makedirs("eval", exist_ok=True)
+    
+    results_path = "eval/results.md"
+    
+    with open(results_path, "w") as f:
+        # Initialize results file with header
+        f.write("# Evaluation Results\n\n")
+        f.write("| Query # | Customer Query | Prompting Method | Response | Relevance (1-5) | Coherence (1-5) | Helpfulness (1-5) |\n")
+        f.write("|---------|----------------|------------------|----------|-----------------|-----------------|-------------------|\n")
+
         print(f"Loaded {len(queries)} e-commerce queries for evaluation.\n")
+        print(f"Writing results to {results_path}\n")
         
         for i, query in enumerate(queries, 1):
             print(f"Query {i}: {query}")
@@ -71,17 +80,15 @@ if __name__ == "__main__":
             # Zero-Shot
             zero_shot_prompt = zero_shot_template.format(query=query)
             print("  Querying zero-shot...")
-            zero_response = query_ollama(zero_shot_prompt)
-            print(f"  Zero-Shot Response: {zero_response[:100]}...\n")
+            zero_response = query_ollama(zero_shot_prompt).replace("\n", " ") # Ensure it fits in one table row
+            f.write(f"| {i} | {query} | Zero-Shot | {zero_response} | | | |\n")
+            print(f"  Zero-Shot Response: {zero_response[:50]}...\n")
             
             # One-Shot
             one_shot_prompt = one_shot_template.format(query=query)
             print("  Querying one-shot...")
-            one_response = query_ollama(one_shot_prompt)
-            print(f"  One-Shot Response: {one_response[:100]}...\n")
-            
-            # Breaking after 2 queries for now to avoid long wait during development, 
-            # will remove break in Phase 5 for full evaluation.
-            if i >= 2:
-                print("Stopping after 2 queries for Phase 4 validation.")
-                break
+            one_response = query_ollama(one_shot_prompt).replace("\n", " ") # Ensure it fits in one table row
+            f.write(f"| {i} | {query} | One-Shot | {one_response} | | | |\n")
+            print(f"  One-Shot Response: {one_response[:50]}...\n")
+
+    print(f"\nEvaluation complete. Results saved to {results_path}")
