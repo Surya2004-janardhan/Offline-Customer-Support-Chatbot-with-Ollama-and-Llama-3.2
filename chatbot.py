@@ -1,4 +1,34 @@
 # chatbot.py
+import requests
+import json
+import os
+
+OLLAMA_ENDPOINT = "http://localhost:11434/api/generate"
+MODEL_NAME = "llama3.2:3b"
+
+def query_ollama(prompt):
+    """Sends a prompt to the Ollama API and returns the generated response."""
+    payload = {
+        "model": MODEL_NAME,
+        "prompt": prompt,
+        "stream": False
+    }
+    try:
+        response = requests.post(OLLAMA_ENDPOINT, json=payload, timeout=30)
+        response.raise_for_status()
+        result = response.json()
+        return result.get("response", "").strip()
+    except requests.exceptions.RequestException as e:
+        print(f"Error querying Ollama: {e}")
+        return f"Error: Could not get a response from the model. Details: {e}"
+
+def read_template(template_path):
+    """Reads a prompt template from a file."""
+    if not os.path.exists(template_path):
+        return None
+    with open(template_path, 'r') as f:
+        return f.read()
+
 
 def get_ecommerce_queries():
     """Returns the 20 adapted e-commerce customer queries."""
@@ -27,4 +57,31 @@ def get_ecommerce_queries():
 
 if __name__ == "__main__":
     queries = get_ecommerce_queries()
-    print(f"Loaded {len(queries)} e-commerce queries for evaluation.")
+    zero_shot_template = read_template("prompts/zero_shot_template.txt")
+    one_shot_template = read_template("prompts/one_shot_template.txt")
+
+    if not zero_shot_template or not one_shot_template:
+        print("Error: Prompt templates not found. Please ensure they exist in the 'prompts/' directory.")
+    else:
+        print(f"Loaded {len(queries)} e-commerce queries for evaluation.\n")
+        
+        for i, query in enumerate(queries, 1):
+            print(f"Query {i}: {query}")
+            
+            # Zero-Shot
+            zero_shot_prompt = zero_shot_template.format(query=query)
+            print("  Querying zero-shot...")
+            zero_response = query_ollama(zero_shot_prompt)
+            print(f"  Zero-Shot Response: {zero_response[:100]}...\n")
+            
+            # One-Shot
+            one_shot_prompt = one_shot_template.format(query=query)
+            print("  Querying one-shot...")
+            one_response = query_ollama(one_shot_prompt)
+            print(f"  One-Shot Response: {one_response[:100]}...\n")
+            
+            # Breaking after 2 queries for now to avoid long wait during development, 
+            # will remove break in Phase 5 for full evaluation.
+            if i >= 2:
+                print("Stopping after 2 queries for Phase 4 validation.")
+                break
