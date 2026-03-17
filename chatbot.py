@@ -20,7 +20,9 @@ def get_ecommerce_queries():
     "Is it possible to track the exact location of the delivery truck?",
     "Can I use two different promo codes on the same checkout?",
     "Which payment methods do you accept for international shipping?",
-    "How long does it typically take for a refund to process to my bank?"
+    "How long does it typically take for a refund to process to my bank?",
+    "Can I change the email address associated with my account?",
+    "Do you offer gift wrapping services for online orders?"
 ]
 
 if __name__ == "__main__":
