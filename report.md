@@ -22,3 +22,11 @@ The evaluation revealed a significant performance gap between the two prompting 
 ### Observations:
 - **Zero-Shot:** While coherent, responses were often too generic. They lack specific actionable details such as placeholder URLs or detailed step-by-step instructions.
 - **One-Shot:** The inclusion of a single high-quality example dramatically improved the model's ability to follow a specific "helpful and professional" persona. The responses were more detailed, providing specific links and departmental contacts (e.g., `replacement@example.com`).
+
+## 4. Conclusion
+The evaluation demonstrated that one-shot prompting is essential for achieving professional and helpful responses from a local model like Llama 3.2. By providing a clear example, the model was able to adopt the desired persona and provide actionable information that was absent in zero-shot responses.
+
+## 5. Limitations
+- **Model Size:** The 3B model, while capable, occasionally produced slight variations in tone. Larger models might offer even more consistent persona adherence.
+- **Hardware Dependencies:** As an offline solution, performance is tied to local hardware (CPU/GPU) capabilities.
+- **Data Scope:** The evaluation was limited to 20 queries; a broader dataset would provide more comprehensive insights.
