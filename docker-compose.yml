@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
+
+  chatbot:
+    build: .
+    container_name: chatbot
+    environment:
+      - OLLAMA_HOST=ollama
+    volumes:
+      - ./eval:/app/eval
+    depends_on:
+      - ollama
+    restart: on-failure
+
+volumes:
+  ollama_data:

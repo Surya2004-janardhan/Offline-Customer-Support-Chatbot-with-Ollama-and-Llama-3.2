@@ -3,7 +3,8 @@ import requests
 import json
 import os
 
-OLLAMA_ENDPOINT = "http://localhost:11434/api/generate"
+OLLAMA_HOST = os.getenv("OLLAMA_HOST", "localhost")
+OLLAMA_ENDPOINT = f"http://{OLLAMA_HOST}:11434/api/generate"
 MODEL_NAME = "llama3.2:3b"
 
 def query_ollama(prompt):
